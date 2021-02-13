@@ -111,17 +111,21 @@ end
 
 --- Gets the text corresponding to a given node
 -- @param node the node
--- @param bufnr the buffer from which the node is extracted.
+-- @param source the buffer number or the source string from which the node is extracted.
 function M.get_node_text(node, source)
   local start_row, start_col, start_byte = node:start()
   local end_row, end_col, end_byte = node:end_()
 
   if type(source) == "number" then
     if start_row ~= end_row then
-      return nil
+      local lines = a.nvim_buf_get_lines(source, start_row, end_row+1, true)
+      lines[1] = string.sub(lines[1], start_col+1)
+      lines[#lines] = string.sub(lines[#lines], 1, end_col)
+      return lines
+    else
+      local line = a.nvim_buf_get_lines(source, start_row, start_row+1, true)[1]
+      return string.sub(line, start_col+1, end_col)
     end
-    local line = a.nvim_buf_get_lines(source, start_row, start_row+1, true)[1]
-    return string.sub(line, start_col+1, end_col)
   elseif type(source) == "string" then
     return source:sub(start_byte+1, end_byte)
   end

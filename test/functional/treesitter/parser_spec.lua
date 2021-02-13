@@ -595,5 +595,39 @@ int x = INT_MAX;
         eq(result, "value")
       end)
     end)
+
+    describe("when using get_node_text", function()
+      it("should set/get the data correctly", function()
+        insert([[
+          {
+            int x = 3;
+            int x = 4;
+          } // not part of the node
+        ]])
+
+        local result = exec_lua([[
+        local result
+
+        query = vim.treesitter.parse_query("c", '((number_literal) @number (#set! @number "key" "value"))')
+        parser = vim.treesitter.get_parser(0, "c")
+
+        for pattern, match, metadata in query:iter_matches(parser:parse()[1]:root(), 0) do
+          result = metadata[pattern].key
+        end
+
+        return result
+        ]])
+
+        eq(result, "value")
+        eq({
+          {0, 0, 7, 0},   -- root tree
+          {3, 15, 3, 16}, -- VALUE 123
+          {4, 16, 4, 17}, -- VALUE1 123
+          {5, 16, 5, 17}, -- VALUE2 123
+          {1, 26, 1, 65}, -- READ_STRING(x, y) (char_u *)read_string((x), (size_t)(y))
+          {2, 29, 2, 68}  -- READ_STRING_OK(x, y) (char_u *)read_string((x), (size_t)(y))
+        }, get_ranges())
+      end)
+    end)
   end)
 end)
