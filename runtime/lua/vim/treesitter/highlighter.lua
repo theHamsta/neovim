@@ -22,9 +22,7 @@ function AtomStyleCaptureFallback:__index(capture)
     shortened = shortened:gsub('%..*$', '')
     rtn = rawget(self, shortened)
   end
-  if rtn then
-    rawset(self, capture, rtn)
-  end
+  rawset(self, capture, rtn or "__notfound")
   return rtn
 end
 
