@@ -23,7 +23,7 @@ local hl_query = [[
   "enum" @type
   "extern" @type
 
-  (string_literal) @string
+  (string_literal) @string.nonexistent-specializer-for-string.should-fallback-to-string
 
   (number_literal) @number
   (char_literal) @string
