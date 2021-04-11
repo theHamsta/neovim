@@ -320,6 +320,11 @@ Handlers can set match level data by setting directly on the metadata object `me
 Handlers can set node level data by using the capture id on the metadata table
 `metadata[capture_id].key = value`
 
+					*vim.treesitter.query.list_directives()*
+vim.treesitter.query.list_directives()
+
+This lists the currently available directives to use in queries.
+
 Treesitter syntax highlighting (WIP)			*lua-treesitter-highlight*
 
 NOTE: This is a partially implemented feature, and not usable as a default
