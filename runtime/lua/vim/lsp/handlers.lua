@@ -19,11 +19,11 @@ local function err_message(...)
 end
 
 M['textDocument/semanticTokens/full'] = function(_, _, res, client_id, bufnr)
-  semantic_tokens._handle_semantic_tokens_full(client_id, bufnr, res)
+  semantic_tokens._handle_full(client_id, bufnr, res)
 end
 
-M['workspace/semanticTokens/refresh'] = function()
-  return semantic_tokens.on_refresh()
+M['workspace/semanticTokens/refresh'] = function(_, _, _, client_id)
+  return semantic_tokens.on_refresh(client_id)
 end
 
 --@see https://microsoft.github.io/language-server-protocol/specifications/specification-current/#workspace_executeCommand
